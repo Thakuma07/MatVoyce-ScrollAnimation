@@ -1,0 +1,84 @@
+@font-face {
+    font-family: "F37Judge";
+    src: url("./fonts/F37Judge-RegularCompressed.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "F37Judge";
+    overflow-x: hidden;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+section {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+h1 {
+    font-size: 4vw;
+    text-transform: uppercase;
+}
+
+.hero, .outro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #edebde;
+}
+
+.sticky {
+    background: #fffef8;
+}
+
+.titles {
+    position: absolute;
+    width: 400vw;
+    height: 100vh;
+    display: flex;
+}
+
+.title {
+    flex: 1;
+    position: relative;
+}
+
+.title h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9vw;
+    font-style: italic;
+}
+
+.title-1 { color: #dafa6c; }
+.title-2 { color: #10d0f4; }
+.title-3 { color: #1f1f1f; }
+
+.images {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    perspective: 2000px;
+}
+
+.card {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 2em;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
