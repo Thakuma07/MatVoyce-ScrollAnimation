@@ -18,11 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { top: "45%", left: "55%" },
     ];
 
+    // Cache DOM elements
     const titlesContainer = document.querySelector(".titles");
+    const imagesContainer = document.querySelector(".images");
     const moveDistance = window.innerWidth * 3;
 
-    const imagesContainer = document.querySelector(".images");
-
+    // Create cards
     for (let i = 1; i <= 10; i++) {
         const card = document.createElement("div");
         card.className = `card card-${i}`;
@@ -39,14 +40,33 @@ document.addEventListener("DOMContentLoaded", () => {
         imagesContainer.appendChild(card);
     }
 
+    // Cache elements AFTER creation
     const cards = document.querySelectorAll(".card");
+    const titleElements = document.querySelectorAll(".title");
 
+    // Cache title children once
+    const titleData = [];
+    titleElements.forEach(title => {
+        titleData.push({
+            title1: title.querySelector(".title-1"),
+            title2: title.querySelector(".title-2"),
+            title3: title.querySelector(".title-3")
+        });
+    });
+
+    // Initialize cards
     cards.forEach(card => {
         gsap.set(card, {
             z: -50000,
             scale: 0
         });
     });
+
+    // Pre-calculate staggers
+    const staggers = [];
+    for (let i = 0; i < cards.length; i++) {
+        staggers.push(i * 0.075);
+    }
 
     ScrollTrigger.create({
         trigger: ".sticky",
@@ -56,22 +76,19 @@ document.addEventListener("DOMContentLoaded", () => {
         scrub: 1,
 
         onUpdate: (self) => {
-
+            // Move titles container
             gsap.set(titlesContainer, {
                 x: -moveDistance * self.progress
             });
 
-            const velocity = self.velocity;
+            const velocity = self.getVelocity ? self.getVelocity() : 0;
             const normalizedVelocity = velocity / Math.abs(velocity) || 0;
             const currentSpeed = Math.min(Math.abs(velocity / 500), 30);
-
             const isAtEdge = self.progress <= 0 || self.progress >= 1;
 
-            document.querySelectorAll(".title").forEach(title => {
-
-                const title1 = title.querySelector(".title-1");
-                const title2 = title.querySelector(".title-2");
-                const title3 = title.querySelector(".title-3");
+            // Update titles (using cached data)
+            for (let i = 0; i < titleData.length; i++) {
+                const { title1, title2, title3 } = titleData[i];
 
                 if (isAtEdge) {
                     gsap.to([title1, title2], {
@@ -103,11 +120,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     xPercent: -50,
                     x: 0
                 });
-            });
+            }
 
+            // Update cards (using cached staggers)
             cards.forEach((card, index) => {
-                const stagger = index * 0.075;
-                const progress = Math.max(0, Math.min(1, (self.progress - stagger) * 3));
+                const progress = Math.max(0, Math.min(1, (self.progress - staggers[index]) * 3));
                 const targetZ = index === cards.length - 1 ? 1500 : 2000;
 
                 gsap.set(card, {
